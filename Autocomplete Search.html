@@ -1,0 +1,318 @@
+<html>
+<script type="text/javascript">
+
+var scientists = new Array
+("Isaac Newton","Albert Einstein","Neils Bohr",	"Charles Darwin","Louis Pasteur","Sigmund Freud","Galileo Galilei","Antoine Laurent","Johannes Kepler",
+"Nicolaus Copernicus","Michael Faraday","James Clerk Maxwell","Claude Bernard","Franz Boas","Werner Heisenberg","Linus Pauling","Rudolf Virchow","Erwin Schrodinger",
+"Ernest Rutherford","Paul Dirac","Andreas Vesalius","Tycho Brahe","Comte de Buffon","Ludwig Boltzmann","Max Planck","Marie Curie","William Herschel",	
+"Charles Lyell","Pierre Simon de Laplace","Edwin Hubble","Joseph J. Thomson","Max Born","Francis Crick","Enrico Fermi","Leonard Euler","Justus Liebig",	
+"Arthur Eddington","William Harvey","Marcello Malpighi","Christiaan Huygens","Carl Gauss","Albrecht von Haller","August Kekule","Robert Koch","Murray Gell-Mann",	
+"Emil Fischer","Dmitri Mendeleev","Sheldon Glashow","James Watson","John Bardeen","John von Neumann","Richard Feynman","Alfred Wegener","Stephen Hawking","Anton van Leeuwenhoek","Max von Laue",	 
+"Gustav Kirchhoff","Hans Bethe","Euclid","Gregor Mendel","Heike Kamerlingh Onnes","Thomas Hunt Morgan","Hermann von Helmholtz","Paul Ehrlich","Ernst Mayr","Charles Sherrington", 
+"Theodosius Dobzhansky","Max Delbruck","Jean Baptiste Lamarck","William Bayliss","Noam Chomsky","Frederick Sanger","Lucretius","John Dalton","Louis Victor de Broglie","Carl Linnaeus",	
+"Jean Piaget","George Gaylord Simpson","Claude Levi-Strauss","Lynn Margulis	","Karl Landsteiner","Konrad Lorenz","Edward O. Wilson","Frederick Gowland Hopkins","Gertrude Belle Elion",
+"Hans Selye	","J. Robert Oppenheimer","Edward Teller","Willard Libby","Ernst Haeckel","Jonas Salk","Emil Kraepelin","Trofim Lysenko","Francis Galton","Alfred Binet",
+"Alfred Kinsey","Alexander Fleming","B. F. Skinner","Wilhelm Wundt","Archimedes");
+
+var books = new Array("Implementing Analytics",
+"Visualizing Data","Data Mining Discovering and Visualizing Patterns with Python","Data Science for Business","A Concise Guide to Compositional Data Analysis",
+"Alternative Methods of Regression","How Algorithms Came to Rule Our World","Machine Learning and Statistics, by Lion Solver",
+"Applied Data Science | Columbia University Course","Analyzing the Analyzers",
+"Ace the Programming Interview: 160 Questions and Answers for Success","Programming Interviews Exposed: Secrets to Landing Your Next Job, 2nd Edition","Forecasting: principles and practice",
+"Big Data Journal","EPJ Data Science Journal","Journal of Data Science","Data Science Journal","Practical Data Science with R","Machine Learning plus Intelligent Optimization",
+"Advanced Database Marketing","Predictive Analytics: Microsoft Excel","Getting Started with Business Analytics: Insightful Decision-Making","Data-Intensive Science",
+"Delivering Business Analytics: Practical Guidelines for Best Practice","Secrets of the Big Data Revolution","My O'Reilly book collection","Python for Data Analysis",
+"Data Analysis with Open Source Tools","The Elements of Graphing Data","Show Me the Numbers: Designing Tables and ","Visualizing Data","The Wall Street Journal Guide to Information ...",
+"Visualize This: The FlowingData Guide to ...","The Elements of Graphing Data","Analyzing Multivariate Data","Cluster Analysis, 4th edition","Naked Statistics: Stripping the Dread from the Data",
+"Business Analytics: A Practitioner's Guide","Discovering Knowledge in Data","Introduction to Bayesian Statistics, 2nd edition","Introduction to Business Data Mining",
+"Matrix Methods in Data Mining and Pattern Recognition","Multivariate Statistical Analysis","Negative Binomial Regression","Statistical Ideas and Methods","Statistical Pattern Recognition, 2nd edition",
+"Survey of Text Mining: Clustering, Classification, and Retrieval	Berry, Michael W. Teaching Statistics","The Active Practice of   Statistics","Statistical Ideas and Methods","Statistics Using R","Data Mining in Public and Private Sectors: Organizational and Gover",
+"Intelligent Soft Computation and Evolving Data Mining: Integrating ","Cases on Health Outcomes and Clinical Data Mining: Studies and Fram","Strategic Advancements in Utilizing Data Mining and Warehousing Tec",
+"User-Centered Interactive Data Mining","Dynamic and Advanced Data Mining for Progressing Technological Deve","Biological Data Mining in Protein Interaction Networks",
+"Big Data Glossary","Data Source Handbook","A Practitioner's Guide to Business Analytics","Mining of Massive Data Sets","Hadoop in Practice","Improving Accuracy Through Combining Predictions ",
+"Causality","Handbook of Engineering Statistics","Statistics for Non-Statisticians","A few new books from the CRC Press","New journal: Decision Analytics ","Machine Learning in Action",
+"Big Data - Principles and best practices of scalable realtime data","Handbook of Data Intensive Computing","Practical Text Mining and Statistical Analysis for Non-structured T",
+"New books on design of experiments (DOE)","Data Mining: Concepts and Techniques","Keyword Intelligence: Keyword Research for Search, Social, and Beyond","Journal of Data Science",
+"Data Mining (Wiley / IEEE)","Big Data Now: Current Perspectives from O'Reilly Radar","Great statistics reference book covering a lot of topics","The R Journal",
+"Data Analysis with Open Source Tools","Competing on Analytics: The New Science of Winning","Presenting to Win: The Art of Telling Your Story","Information Visualization",
+"Encyclopedia of Machine Learning","Analyzing Data from Facebook, Twitter, Linkedin","Handbook of Natural Language Processing","Mining of Massive Datasets (free)",
+"Business Analytics for Managers","Handbook of Fitting Statistical Distributions with R","Data Mining Techniques in CRM: Inside Customer Segmentation",
+"Handbook of Statistical Analysis and Data Mining Applications");
+
+var outp;
+var oldins;
+var posi = -1;
+var words = new Array();
+var input;
+var key;
+
+function setVisible(visi)
+{
+var x = document.getElementById("shadow");
+var t = document.getElementsByName("text")[0];
+x.style.position = 'absolute';
+x.style.top = (findPosY(t)+3)+"px";
+x.style.left = (findPosX(t)+2)+"px";
+x.style.visibility = visi;
+}
+function init()
+{
+outp = document.getElementById("output");
+window.setInterval("lookAt()", 100);
+setVisible("hidden");
+document.onkeydown = keygetter; //needed for Opera...
+document.onkeyup = keyHandler;
+}
+function findPosX(obj)
+{
+var curleft = 0;
+if (obj.offsetParent)
+{
+while (obj.offsetParent)
+{
+curleft += obj.offsetLeft;
+obj = obj.offsetParent;
+}
+}
+else if (obj.x)
+curleft += obj.x;
+return curleft;
+}
+function findPosY(obj)
+{
+var curtop = 0;
+if (obj.offsetParent)
+{
+curtop += obj.offsetHeight;
+while (obj.offsetParent)
+{
+curtop += obj.offsetTop;
+obj = obj.offsetParent;
+}
+}
+else if (obj.y)
+{
+curtop += obj.y;
+curtop += obj.height;
+}
+return curtop;
+}
+function lookAt()
+{
+var ins = document.getElementsByName("text")[0].value;
+if (oldins == ins)
+return;
+else if (posi > -1);
+
+else if (ins.length > 0)
+{
+words = getWord(ins);
+if (words.length > 0)
+{
+clearOutput();
+for (var i=0;i < words.length; ++i)
+addWord (words[i]);
+setVisible("visible");
+input = document.getElementsByName("text")[0].value;
+}
+else
+{
+setVisible("hidden");
+posi = -1;
+}
+}
+else
+{
+setVisible("hidden");
+posi = -1;
+}
+oldins = ins;
+}
+
+function addWord(word)
+{
+var sp = document.createElement("div");
+sp.appendChild(document.createTextNode(word));
+sp.onmouseover = mouseHandler;
+sp.onmouseout = mouseHandlerOut;
+sp.onclick = mouseClick;
+outp.appendChild(sp);
+}
+
+function clearOutput()
+{
+while (outp.hasChildNodes())
+{
+noten=outp.firstChild;
+outp.removeChild(noten);
+}
+posi = -1;
+}
+
+function getWord(beginning)
+{
+	var words = new Array();
+	if(document.getElementById('scientists').checked)
+	{
+		for (var i=0;i < scientists.length; ++i)
+			{
+		var j = -1;
+		var correct = 1;
+		while (correct == 1 && ++j < beginning.length)
+		{
+			if (scientists[i].charAt(j) != beginning.charAt(j))
+			correct = 0;
+		}
+		if (correct == 1)
+		words[words.length] = scientists[i];
+			}
+			return words;
+	}
+	else if(document.getElementById('books').checked)
+	{
+	for (var i=0;i < books.length; ++i)
+			{
+		var j = -1;
+		var correct = 1;
+		while (correct == 1 && ++j < beginning.length)
+		{
+			if (books[i].charAt(j) != beginning.charAt(j))
+			correct = 0;
+		}
+		if (correct == 1)
+		words[words.length] = books[i];
+			}
+			return words;
+  
+	}
+	
+}
+
+
+function setColor (_posi, _color, _forg)
+{
+outp.childNodes[_posi].style.background = _color;
+outp.childNodes[_posi].style.color = _forg;
+}
+function keygetter(event)
+{
+if (!event && window.event)
+event = window.event;
+if (event)
+key = event.keyCode;
+else
+key = event.which;
+}
+function keyHandler(event)
+{
+if (document.getElementById("shadow").style.visibility == "visible")
+{
+var textfield = document.getElementsByName("text")[0];
+if (key == 40)//key down
+{
+if (words.length > 0 && posi <= words.length-1)
+{
+if (posi >=0)
+setColor(posi, "#fff", "black");
+else
+input = textfield.value;
+setColor(++posi, "blue", "white");
+textfield.value = outp.childNodes[posi].firstChild.nodeValue;
+}
+}
+else if (key == 38)
+{ //Key up
+if (words.length > 0 && posi >= 0)
+{
+if (posi >=1)
+{
+setColor(posi, "#fff", "black");
+setColor(--posi, "blue", "white");
+textfield.value = outp.childNodes[posi].firstChild.nodeValue;
+}
+else
+{
+setColor(posi, "#fff", "black");
+textfield.value = input;
+textfield.focus();
+posi--;
+}
+}
+}
+else if (key == 27)
+{ // Esc
+textfield.value = input;
+setVisible("hidden");
+posi = -1;
+oldins = input;
+}
+else if (key == 8)
+{ // Backspace
+posi = -1;
+oldins=-1;
+}
+}
+}
+var mouseHandler=function()
+{
+for (var i=0; i < words.length; ++i)
+setColor (i, "white", "black");
+this.style.background = "blue";
+this.style.color= "white";
+}
+var mouseHandlerOut=function()
+{
+this.style.background = "white";
+this.style.color= "black";
+}
+var mouseClick=function()
+{
+document.getElementsByName("text")[0].value = this.firstChild.nodeValue;
+setVisible("hidden");
+posi = -1;
+oldins = this.firstChild.nodeValue;
+}
+</script>
+
+
+<script type="text/javascript">
+var allRadios = document.getElementsByName('radiobtn');
+var booRadio;
+var x = 0;
+for(x = 0; x < allRadios.length; x++){
+
+        allRadios[x].onclick = function(){
+
+            if(booRadio == this){
+                this.checked = false;
+        booRadio = null;
+            }else{
+            booRadio = this;
+        }
+        };
+
+}
+</script>
+<script>
+function Search() {
+    alert("Redirecting to search results.........");
+}
+</script>
+<body onLoad="init();">
+
+
+<center>
+Start with capital character like Issac Newton.....<br>
+<input type="radio" name="radiobtn" value="books" id="books">Book List
+<input type="radio" name="radiobtn" value="scientist" id= "scientists" >100 Famous Scientist<br>
+<input type="text" name="text" autocomplete="off" size="50">
+<input type = "button" name ="searchbtn" value ="Search" id ="searchbtn" onClick="Search()">
+
+
+<div id="shadow">
+<div id="output">
+</div>
+</div>
+
+</body>
+</html>
